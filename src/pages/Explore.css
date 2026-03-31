@@ -1,0 +1,23 @@
+.explor-container {
+    padding: 1rem;
+}
+
+.area-list {
+    padding: 1rem;
+}
+
+.area-card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 10px;
+}
+
+.area-card h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.area-card p {
+    margin-bottom: 5px;
+}
