@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import ActiveBuffs from "../components/ActiveBuffs";
 import { useGame } from "../context/GameContext";
 import "./Home.css";
@@ -24,7 +25,7 @@ const Home = () => {
                 ) : (
                     <div>
                         <p>待機中。探索に出発しましょう！</p>
-                        <a href='/explore'>探索</a>
+                        <Link to='/explore' className="nav-button">探索へ出発</Link>
                     </div>
                 )
             }

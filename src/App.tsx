@@ -4,12 +4,16 @@ import Home from "./pages/Home";
 import Explore from "./pages/Explore";
 import DataManager from "./pages/DataManager";
 import Shop from "./pages/Shop";
+import ResultModal from "./components/ResultModal";
 
 function App() {
 //  localStorage.clear();
 //  location.reload();
   return (
     <Router>
+
+      <ResultModal />
+
       <nav className="nav-container">
         <Link to="/">ホーム</Link>
         <Link to="/explore">探索</Link>
@@ -23,6 +27,7 @@ function App() {
         <Route path="/shop" element={<Shop  />} />
         <Route path="/data" element={<DataManager />} />
       </Routes>
+      
     </Router>
   );
 }

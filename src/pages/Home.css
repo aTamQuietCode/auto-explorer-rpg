@@ -3,3 +3,19 @@
     justify-content: center;
     align-items: center;
 }
+
+.nav-button {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #4a90e2;
+    color: white;
+    text-decoration: none; /* 下線を消す */
+    border-radius: 8px;
+    font-weight: bold;
+    margin-top: 10px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.nav-button:active {
+    transform: translateY(2px); /* 押した時に少し凹む演出（スマホで気持ちいい！） */
+}

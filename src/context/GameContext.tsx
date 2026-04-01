@@ -8,6 +8,7 @@ interface GameContextType {
     gameState: GameState;
     startExpedition: (areaId: string, areaName: string, durationSec: number) => void;
     claimReward: () => void;
+    closeResult: () => void;
     importSaveData: (data: GameState) => void;
     buyUpgrade: () => void;
     sellItem: (itemId: string) => void;
@@ -21,6 +22,7 @@ const initialState: GameState = {
     gold: 0,
     inventory: [],
     activeExpedition: null,
+    lastResult: null,
     nextExpeditionSpeedBoost: 1.0,
     lastUpdate: Date.now(),
     incomePerMinute: 10,
@@ -59,7 +61,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         }
     }, [gameState.offlineStats]);   // include in dependent array
 
-    const { startExpedition, claimReward } = useExpedition(gameState, setGameState);
+    const { startExpedition, claimReward, closeResult } = useExpedition(gameState, setGameState);
     const { sellItem, buyUpgrade, useItem } = useGameActions(gameState, setGameState);
 
     // Save process
@@ -70,7 +72,11 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     // Update "lastUpdate" periodically (keeps time even while the app is open)
     useEffect(() => {
         const timer = setInterval(() => {
-            setGameState(prev => ({ ...prev, lastUpdate: Date.now() }));
+            setGameState(prev => ({ 
+                ...prev, 
+                lastUpdate: 
+                Date.now() 
+            }));
         }, 60000);  // Update every minute
         return () => clearInterval(timer);
     }, []);
@@ -85,6 +91,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             gameState, 
             startExpedition, 
             claimReward, 
+            closeResult,
             importSaveData, 
             buyUpgrade,
             sellItem,

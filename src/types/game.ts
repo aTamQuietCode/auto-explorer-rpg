@@ -21,10 +21,17 @@ export interface Expedition {
     endTime: number;    // Scheduled end time(ms)
 }
 
+export interface ExpeditionResult {
+    areaName: string;
+    gold: number;
+    items: string[];
+}
+
 export interface GameState {
     gold: number;
     inventory: string[];
     activeExpedition: Expedition | null;
+    lastResult: ExpeditionResult | null;
     nextExpeditionSpeedBoost: number;
     lastUpdate: number;         // Last updated time for idle reward calculation
     incomePerMinute: number;    // Automatic reward per minute

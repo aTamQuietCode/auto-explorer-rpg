@@ -21,6 +21,8 @@ export const useExpedition = (
             endTime: Date.now() + boostedDuration * 1000,
         };
 
+        alert(`探索に出発しました！`);
+
         setGameState(prev => ({
             ...prev,
             activeExpedition: newExpedition,
@@ -31,10 +33,7 @@ export const useExpedition = (
     // 報酬受け取り（放置時間の判定）
     const claimReward = useCallback(() => {
         const { activeExpedition } = gameState;
-        if (!activeExpedition) {
-            // console.log("探索中ではありません。");
-            return;
-        }
+        if (!activeExpedition) return;
 
         const now =  Date.now();
         if (now >= activeExpedition.endTime) {
@@ -47,34 +46,46 @@ export const useExpedition = (
             }
 
             // --- ゴールド報酬の計算 (既存) ---
-            const rewardGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
+            const earnedGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
 
             // --- アイテムドロップの判定 ---
-            const obtainedItems: string[] = [];
+            const foundItems: string[] = ["herb"];
 
             area.drops.forEach(drop => {
                 if (Math.random() < drop.chance) {
-                    obtainedItems.push(drop.itemId);
+                    foundItems.push(drop.itemId);
                 }
             });
 
             // --- ステートの更新 ---
             setGameState(prev => ({
                 ...prev,
-                gold: prev.gold + rewardGold,
-                inventory: [...prev.inventory, ...obtainedItems], // インベントリに追加
+                gold: prev.gold + earnedGold,
+                inventory: [...prev.inventory, ...foundItems], // インベントリに追加
                 activeExpedition: null,
+                lastResult: {
+                    areaName: activeExpedition.areaName,
+                    gold: earnedGold,
+                    items: foundItems
+                }
             }));
-            const itemNames = obtainedItems.map(id => ITEMS[id].name).join("、");
-            const itemMsg = obtainedItems.length > 0 ? `\nアイテム入手: ${itemNames}` : "";
-            alert(`${area.name} から帰還！\n${rewardGold} ゴールド獲得！${itemMsg}`);
-        } else {                
+            const itemNames = foundItems.map(id => ITEMS[id].name).join("、");
+            const itemMsg = foundItems.length > 0 ? `\nアイテム入手: ${itemNames}` : "";
+            alert(`${area.name} から帰還！\n${earnedGold} ゴールド獲得！${itemMsg}`);
+        } else {
             // const remain = Math.ceil((activeExpedition.endTime - now) / 1000);
             // console.log(`まだ探索中です...残り ${remain}秒`);
             alert(`まだ探索中です...`);
             return;
         }
     }, [gameState, setGameState]); // gameState が変わるたびに再生成される
+
+    const closeResult = () => {
+        setGameState(prev => ({
+            ...prev,
+            lastResult: null
+        }));
+    };
     
-    return { startExpedition, claimReward };
+    return { startExpedition, claimReward, closeResult};
 };
