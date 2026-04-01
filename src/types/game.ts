@@ -4,6 +4,10 @@ export interface Item {
     description: string;
     rarity: 'Common' | 'Uncommon' | 'Rare';
     sellPrice: number;
+    effect?: {
+        type: string, 
+        value: number
+    };
 }
 
 export interface DropTable {
@@ -21,9 +25,21 @@ export interface GameState {
     gold: number;
     inventory: string[];
     activeExpedition: Expedition | null;
+    nextExpeditionSpeedBoost: number;
     lastUpdate: number;         // Last updated time for idle reward calculation
     incomePerMinute: number;    // Automatic reward per minute
     upgradeLevel: number;       // reinforcement level
+    sellItem: string;
+    useItem: string;
+    offlineStats?: {
+        minutes: number;
+        gold: number;
+    } | null;
+    buffs?: {
+        speedBoost: number;   // 探索時間短縮
+        goldBoost: number;    // ゴールド獲得アップ
+        dropBoost: number;    // レア泥率アップ
+    } | null;
 }
 
 export interface ExplorationArea {

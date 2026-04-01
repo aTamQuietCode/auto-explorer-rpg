@@ -1,4 +1,6 @@
+import ActiveBuffs from "../components/ActiveBuffs";
 import { useGame } from "../context/GameContext";
+import "./Home.css";
 
 const Home = () => {
     const {gameState, claimReward} = useGame();
@@ -6,15 +8,24 @@ const Home = () => {
     return (
         <div>
             <h1>マイキャンプ</h1>
-            <p>所持金: {gameState.gold} G</p>
+
+            <section className="status-section">
+                <p>所持金: {gameState.gold} G</p>
+                <p>強化レベル: Lv.{gameState.upgradeLevel}</p>
+                
+                <ActiveBuffs />
+            </section>
         
             {gameState.activeExpedition ? (
-                <div>
-                    <p>現在 {gameState.activeExpedition.areaName} を探索中...</p>
-                    <button onClick={claimReward}>帰還を確認する</button>
-                </div>
+                    <div>
+                        <p>現在 {gameState.activeExpedition.areaName} を探索中...</p>
+                        <button onClick={claimReward}>帰還を確認する</button>
+                    </div>
                 ) : (
-                    <p>待機中。探索に出発しましょう！</p>
+                    <div>
+                        <p>待機中。探索に出発しましょう！</p>
+                        <a href='/explore'>探索</a>
+                    </div>
                 )
             }
         </div>

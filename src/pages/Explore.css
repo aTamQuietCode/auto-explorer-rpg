@@ -10,7 +10,7 @@
     border: 1px solid #ccc;
     padding: 1rem;
     border-radius: 8px;
-    margin-bottom: 10px;
+/*    margin-bottom: 10px;*/
 }
 
 .area-card h3 {
@@ -20,4 +20,8 @@
 
 .area-card p {
     margin-bottom: 5px;
+}
+
+.buff-text {
+    color: crimson;
 }

@@ -1,31 +1,21 @@
+import Inventory from "../components/Inventory";
 import { useGame } from "../context/GameContext";
 import "./Shop.css";
 
 const Shop = () => {
     const { gameState, buyUpgrade } = useGame();
     
-    // 1. まず gameState 自体が存在するかチェック
     if (!gameState) {
         return <div>Loading Game Data...</div>;
     }
     
-    // 2. 必要なプロパティが存在するかチェック（undefinedを回避）
-    const gold = gameState.gold ?? 0;
     const upgradeLevel = gameState.upgradeLevel ?? 10;
-    const incomePerMinute = gameState.incomePerMinute ?? 0;
     const nextCost = (upgradeLevel + 1) * 500;
 
     if (!gameState || Object.keys(gameState).length === 0) {
         return <div>Loading Game Data...</div>;
     }
 
-    console.log("Current gold:", gameState?.gold);
-    if (!gameState) {
-        console.error("gameState が定義されていません。");
-    } else {
-        console.log("Raw gameState:", gameState);
-        console.log("Keys found:", Object.keys(gameState || {}));
-    }
     return (
         <div>
             <h1>ショップ</h1>
@@ -40,6 +30,8 @@ const Shop = () => {
                     強化する
                 </button>
             </div>
+            <hr />
+            <Inventory />
         </div>
     );
 };

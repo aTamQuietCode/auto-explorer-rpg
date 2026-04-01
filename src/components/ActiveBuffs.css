@@ -1,0 +1,31 @@
+.active-buffs {
+    display: flex;
+    justify-content: center; /* 横方向の中央寄せ */
+    align-items: center;     /* 縦方向の中央寄せ */
+    width: 100%;             /* 横幅いっぱいに広げてから中身を中央にする */
+    margin: 15px 0;
+}
+
+.buff-badge {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    background: rgba(74, 144, 226, 0.15); /* 透明度のある青 */
+    border: 2px solid #4a90e2;            /* 枠線を少し太く */
+    box-shadow: 0 0 10px rgba(74, 144, 226, 0.3); /* ほんのり光らせる */
+    border-radius: 50px;                  /* 完全に丸くする */
+    color: #4a90e2;
+    font-weight: bold;
+    font-size: 0.9rem;
+    animation: pulse 2s infinite; /* 軽く点滅させて気づかせやすくする */
+}
+
+.buff-badge .icon {
+    margin-right: 6px;
+}
+
+@keyframes pulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
