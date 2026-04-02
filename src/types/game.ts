@@ -36,8 +36,6 @@ export interface GameState {
     lastUpdate: number;         // Last updated time for idle reward calculation
     incomePerMinute: number;    // Automatic reward per minute
     upgradeLevel: number;       // reinforcement level
-    sellItem: string;
-    useItem: string;
     offlineStats?: {
         minutes: number;
         gold: number;
@@ -47,6 +45,8 @@ export interface GameState {
         goldBoost: number;    // ゴールド獲得アップ
         dropBoost: number;    // レア泥率アップ
     } | null;
+    equippedWeaponId: string | null;    // 装備中の武器ID
+    ownedWeaponIds:string[];            // 所持している武器IDのリスト
 }
 
 export interface ExplorationArea {

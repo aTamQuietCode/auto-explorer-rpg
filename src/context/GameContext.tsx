@@ -13,6 +13,7 @@ interface GameContextType {
     buyUpgrade: () => void;
     sellItem: (itemId: string) => void;
     useItem: (itemId: string) => void;
+    setGameState: React.Dispatch<React.SetStateAction<GameState>>;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -27,13 +28,13 @@ const initialState: GameState = {
     lastUpdate: Date.now(),
     incomePerMinute: 10,
     upgradeLevel: 0,
-    sellItem: "",
-    useItem: "",
     buffs: {
         speedBoost: 1.0,
         goldBoost: 1.0,
         dropBoost: 1.0
-    }
+    },
+    equippedWeaponId: null,
+    ownedWeaponIds: []
 };
 
 export const GameProvider = ({ children }: { children: ReactNode }) => {
@@ -89,6 +90,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     return (
         <GameContext.Provider value={{ 
             gameState, 
+            setGameState,
             startExpedition, 
             claimReward, 
             closeResult,
