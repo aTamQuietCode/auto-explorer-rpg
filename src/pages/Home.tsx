@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import ActiveBuffs from "../components/ActiveBuffs";
 import { useGame } from "../context/GameContext";
 import "./Home.css";
+import { WEAPONS } from "../data/weapons";
 
 const Home = () => {
     const {gameState, claimReward} = useGame();
+    //const weapon = WEAPONS[gameState.equippedWeaponId];
 
     return (
         <div>
@@ -13,6 +15,7 @@ const Home = () => {
             <section className="status-section">
                 <p>所持金: {gameState.gold} G</p>
                 <p>強化レベル: Lv.{gameState.upgradeLevel}</p>
+                <p>武器: {gameState.equippedWeaponId ? `${WEAPONS[gameState.equippedWeaponId].name} 💰倍率:${WEAPONS[gameState.equippedWeaponId].goldMultiplier}倍` : "なし"}</p>
                 
                 <ActiveBuffs />
             </section>

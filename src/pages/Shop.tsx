@@ -45,6 +45,7 @@ const Shop = () => {
                 />
                 ))}
             </div>
+            <hr />
 
             <Inventory />
         </div>

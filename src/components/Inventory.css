@@ -47,3 +47,7 @@
     background-color: #666; /* グレー系：手放すアクション */
     color: white;
 }
+
+.inventory-container h2 {
+    padding: 10px;
+}

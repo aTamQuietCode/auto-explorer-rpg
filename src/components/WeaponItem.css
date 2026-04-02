@@ -1,0 +1,10 @@
+.weapon-container {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 8px;
+}
+
+.weapon-container h3{
+    margin-top: 0px;
+    margin-bottom: 10px;
+}
