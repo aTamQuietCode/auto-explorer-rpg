@@ -1,5 +1,4 @@
 import { EXPLPRATION_AREAS } from "../data/areas";
-import { ITEMS } from "../data/items";
 import type { Expedition, GameState } from "../types/game";
 import { useCallback } from "react";
 
@@ -49,7 +48,7 @@ export const useExpedition = (
             const earnedGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
 
             // --- アイテムドロップの判定 ---
-            const foundItems: string[] = ["herb"];
+            const foundItems: string[] = [];
 
             area.drops.forEach(drop => {
                 if (Math.random() < drop.chance) {
@@ -69,12 +68,7 @@ export const useExpedition = (
                     items: foundItems
                 }
             }));
-            const itemNames = foundItems.map(id => ITEMS[id].name).join("、");
-            const itemMsg = foundItems.length > 0 ? `\nアイテム入手: ${itemNames}` : "";
-            alert(`${area.name} から帰還！\n${earnedGold} ゴールド獲得！${itemMsg}`);
         } else {
-            // const remain = Math.ceil((activeExpedition.endTime - now) / 1000);
-            // console.log(`まだ探索中です...残り ${remain}秒`);
             alert(`まだ探索中です...`);
             return;
         }

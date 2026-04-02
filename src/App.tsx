@@ -14,11 +14,23 @@ function App() {
 
       <ResultModal />
 
-      <nav className="nav-container">
-        <Link to="/">ホーム</Link>
-        <Link to="/explore">探索</Link>
-        <Link to="/Shop">Shop</Link>
-        <Link to="/data">データ管理</Link>
+      <nav className="footer-nav">
+        <Link to="/" className="nav-item">
+          <span className="icon">🏠</span>
+          <span className="label">ホーム</span>
+        </Link>
+        <Link to="/explore" className="nav-item">
+          <span className="icon">⚔️</span>
+          <span className="label">探索</span>
+        </Link>
+        <Link to="/shop" className="nav-item">
+          <span className="icon">💰</span>
+          <span className="label">ショップ</span>
+        </Link>
+        <Link to="/data" className="nav-item">
+          <span className="icon">⚙️</span>
+          <span className="label">設定</span>
+        </Link>
       </nav>
 
       <Routes>
