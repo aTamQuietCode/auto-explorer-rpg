@@ -1,6 +1,13 @@
 import { EXPLPRATION_AREAS } from "../data/areas";
+import { MONSTERS } from "../data/monsters";
+import { WEAPONS } from "../data/weapons";
 import type { Expedition, GameState } from "../types/game";
 import { useCallback } from "react";
+
+const BASIC_WEAPON_ATTACK:number = 5;
+const BASIC_MONSTER_GOLD:number = 20;
+const BASIC_ENCCOUNT_PROBABILITY:number = 0.5;
+const BASIC_AREA_ID:string = "forest-1";
 
 export const useExpedition = (
     gameState: GameState,
@@ -17,7 +24,9 @@ export const useExpedition = (
         const newExpedition: Expedition = {
             areaId,
             areaName,
+            startTime: Date.now(),
             endTime: Date.now() + boostedDuration * 1000,
+            monstersDefeated: null
         };
 
         alert(`探索に出発しました！`);
@@ -44,8 +53,45 @@ export const useExpedition = (
                 return;
             }
 
+            
             // --- ゴールド報酬の計算 (既存) ---
-            const earnedGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
+            // const earnedGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
+
+            // Get monster list according to area
+            const areaMonsters = MONSTERS[activeExpedition.areaId] || MONSTERS[BASIC_AREA_ID];
+           //console.error("areaName:",activeExpedition.areaId);
+            //console.error("length:",areaMonsters);
+            // Object for defeated record
+            const defeatedMap: { [key:string]:number } = {};
+            // Get weaponAttack
+            const weaponAttack = gameState.equippedWeaponId ? WEAPONS[gameState.equippedWeaponId].attack : BASIC_WEAPON_ATTACK;
+
+            // Encounter judgment with monsters
+            let monsterGold:number = 0;
+            let defeaterdCount:number = 0;
+
+            // Calculation that the longer the expedition time, the more enconters ther will be.
+            const durationMin:number = Math.floor((activeExpedition.endTime - activeExpedition.startTime)) / 60000;
+            //console.error("durationMin", durationMin);
+            for (let i = 0; i < durationMin; i++) {
+                if (Math.random() < BASIC_ENCCOUNT_PROBABILITY) {
+                    
+                    const monster = areaMonsters[Math.floor(Math.random() * areaMonsters.length)] || [];
+                    //console.error("monster:", monster);
+
+                    defeatedMap[monster.id] = (defeatedMap[monster.id] || 0) +1;
+
+                    defeaterdCount++;
+                    monsterGold += monster.goldReward * (weaponAttack / BASIC_WEAPON_ATTACK);
+                }
+            }
+
+            const defeatedMonsters = Object.entries(defeatedMap).map(([id, count]) => ({
+                monsterId: id,
+                count: count
+            }));
+            // reflection result
+            const earnedGold:number = BASIC_MONSTER_GOLD + Math.floor(monsterGold);
 
             // --- アイテムドロップの判定 ---
             const foundItems: string[] = [];
@@ -65,6 +111,7 @@ export const useExpedition = (
                 lastResult: {
                     areaName: activeExpedition.areaName,
                     gold: earnedGold,
+                    defeatedMonsters: defeatedMonsters,
                     items: foundItems
                 }
             }));

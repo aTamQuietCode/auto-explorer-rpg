@@ -1,3 +1,46 @@
+.defeated-section {
+    margin-top: 15px;
+    width: 100%;
+}
+
+.defeated-section h3 {
+    font-size: 1rem;
+    color: #bdc3c7;
+    margin-bottom: 10px;
+}
+
+/* モンスターを横並び（またはグリッド）にする */
+.monster-grid {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap; /* 入り切らない場合は折り返す */
+    background: rgba(0, 0, 0, 0.2); /* 少し背景色をつけてセクションを分ける */
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* 各モンスターの表示単位 */
+.monster-rep {
+    display: flex;
+    flex-direction: column; /* 絵文字の下に数を表示 */
+    align-items: center;
+}
+
+/* 絵文字のサイズ調整 */
+.monster-icon {
+    margin-top: 10px;
+    font-size: 2.5rem; /* スマホで存在感が出る大きさ */
+}
+
+/* 討伐数のテキスト */
+.monster-count {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #f1c40f; /* 金色 */
+}
+
 .modal-overlay {
     position: fixed;
     top: 0;

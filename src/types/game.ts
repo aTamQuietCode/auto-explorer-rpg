@@ -18,13 +18,21 @@ export interface DropTable {
 export interface Expedition {
     areaId: string;
     areaName: string;
+    startTime: number;
     endTime: number;    // Scheduled end time(ms)
+    monstersDefeated: number | null;
 }
 
 export interface ExpeditionResult {
     areaName: string;
     gold: number;
     items: string[];
+    defeatedMonsters:DefeatedMonster[] | null;
+}
+
+export interface DefeatedMonster {
+    monsterId:string;
+    count: number;
 }
 
 export interface GameState {

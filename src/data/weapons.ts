@@ -3,6 +3,7 @@ export interface Weapon {
     id: string;
     name: string;
     price: number;
+    attack: number;
     description: string;
     goldMultiplier: number; // 探索で手に入るゴールドが何倍になるか
 }
@@ -12,6 +13,7 @@ export const WEAPONS: { [key: string]: Weapon } = {
         id: "copper_sword",
         name: "銅の剣",
         price: 100,
+        attack: 10,
         description: "錆びているが、素手よりはマシ。",
         goldMultiplier: 1.2, // ゴールド1.2倍
     },
@@ -19,6 +21,7 @@ export const WEAPONS: { [key: string]: Weapon } = {
         id: "iron_axe",
         name: "鉄の斧",
         price: 500,
+        attack: 25,
         description: "ずっしりと重い。魔物もイチコロ？",
         goldMultiplier: 2.0, // ゴールド2倍
     },
@@ -26,6 +29,7 @@ export const WEAPONS: { [key: string]: Weapon } = {
         id: "hero_spear",
         name: "勇者の槍",
         price: 5000,
+        attack: 100,
         description: "伝説の勇者が使ったとされる槍。",
         goldMultiplier: 5.0, // ゴールド5倍
     },

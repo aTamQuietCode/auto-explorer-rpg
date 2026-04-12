@@ -3,9 +3,10 @@ import ActiveBuffs from "../components/ActiveBuffs";
 import { useGame } from "../context/GameContext";
 import "./Home.css";
 import { WEAPONS } from "../data/weapons";
+import Exploring from "../components/Exploring";
 
 const Home = () => {
-    const {gameState, claimReward} = useGame();
+    const {gameState} = useGame();
     //const weapon = WEAPONS[gameState.equippedWeaponId];
 
     return (
@@ -22,8 +23,7 @@ const Home = () => {
         
             {gameState.activeExpedition ? (
                     <div>
-                        <p>現在 {gameState.activeExpedition.areaName} を探索中...</p>
-                        <button onClick={claimReward}>帰還を確認する</button>
+                        <Exploring />
                     </div>
                 ) : (
                     <div>

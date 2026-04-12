@@ -1,0 +1,26 @@
+.monster-scanner {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 50px;
+}
+
+.monster-scanner span{
+    position: absolute;
+    text-align: center;
+    opacity: 0;
+    animation: switch 4s infinite;
+}
+
+.monster-scanner span:nth-child(2) {
+    animation-delay: 2s;
+}
+
+@keyframes switch {
+    0%, 10% { opacity: 0; }
+    20%, 50% { opacity: 1; }
+    60%, 100% { opacity: 0; }
+}
