@@ -1,7 +1,7 @@
 import type { GameState } from "../types/game";
 
 export const useStorage = (initialState: GameState) => {
-    const SAVE_KEY = "rpg_save_data";
+    const SAVE_KEY = "auto-explorer-rpg_save_data";
 
     // Load data + consistency check
     const loadGame = (): GameState => {
@@ -44,7 +44,7 @@ export const useStorage = (initialState: GameState) => {
                 lastUpdate: now
             };
         } catch (e) {
-            // console.error("セーブデータの読み込みに失敗しました", e);
+            alert("セーブデータの読み込みに失敗しました");
             return initialState;
         }
     };

@@ -53,14 +53,8 @@ export const useExpedition = (
                 return;
             }
 
-            
-            // --- ゴールド報酬の計算 (既存) ---
-            // const earnedGold = Math.floor(Math.random() * (area.maxGold - area.minGold + 1)) + area.minGold;
-
             // Get monster list according to area
             const areaMonsters = MONSTERS[activeExpedition.areaId] || MONSTERS[BASIC_AREA_ID];
-           //console.error("areaName:",activeExpedition.areaId);
-            //console.error("length:",areaMonsters);
             // Object for defeated record
             const defeatedMap: { [key:string]:number } = {};
             // Get weaponAttack
@@ -77,7 +71,6 @@ export const useExpedition = (
                 if (Math.random() < BASIC_ENCCOUNT_PROBABILITY) {
                     
                     const monster = areaMonsters[Math.floor(Math.random() * areaMonsters.length)] || [];
-                    //console.error("monster:", monster);
 
                     defeatedMap[monster.id] = (defeatedMap[monster.id] || 0) +1;
 
