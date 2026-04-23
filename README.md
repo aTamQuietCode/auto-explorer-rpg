@@ -1,5 +1,7 @@
 # AUTO-EXPLORER-RPG
 
+[![Live Demo](https://img.shields.io/badge/demo-online-green?style=for-the-badge&logo=vercel)](https://auto-explorer-rpg.vercel.app/)
+
 <div align="center">
 
 | ![Home](./images/README/Home.jpg) | ![Result](./images/README/Result.jpg) | ![Shop](./images/README/Shop.jpg) |
