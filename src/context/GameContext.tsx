@@ -37,33 +37,13 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
 
-// 初期値
-const initialState: GameState = {
-    gold: 0,
-    inventory: [],
-    activeExpedition: null,
-    lastResult: null,
-    nextExpeditionSpeedBoost: 1.0,
-    lastUpdate: Date.now(),
-    incomePerMinute: 10,
-    upgradeLevel: 0,
-    buffs: {
-        speedBoost: 1.0,
-        goldBoost: 1.0,
-        dropBoost: 1.0
-    },
-    equippedWeaponId: null,
-    ownedWeaponIds: [],
-    error: null
-};
-
 interface GameProviderProps {
     children:   React.ReactNode;
     initialData?: GameState;
 }
 
 export const GameProvider = ({ children, initialData }: GameProviderProps) => {
-    const { loadGame, saveGame } = useStorage(initialState);
+    const { saveGame } = useStorage(DEFAULT_STATE);
 
     // Use loadGame() as initial value
     const [gameState, setGameState] = useState<GameState>(initialData || DEFAULT_STATE);
@@ -122,7 +102,7 @@ export const GameProvider = ({ children, initialData }: GameProviderProps) => {
             importSaveData, 
             buyUpgrade,
             sellItem,
-            useItem
+            useItem,
         }}>
             {children}
         </GameContext.Provider>
