@@ -1,8 +1,27 @@
-import { createContext, useContext, useState, useEffect, type ReactNode, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
 import type { GameState } from '../types/game';
 import { useGameActions } from '../hooks/useGameActions';
 import { useExpedition } from '../hooks/useExpedition';
 import { useStorage } from '../hooks/useStorage';
+
+export const DEFAULT_STATE: GameState = {
+    gold: 0,
+    inventory: [],
+    activeExpedition: null,
+    lastResult: null,
+    nextExpeditionSpeedBoost: 1.0,
+    lastUpdate: Date.now(),
+    incomePerMinute: 10,
+    upgradeLevel: 0,
+    buffs: {
+        speedBoost: 1.0,
+        goldBoost: 1.0,
+        dropBoost: 1.0
+    },
+    equippedWeaponId: null,
+    ownedWeaponIds: [],
+    error: null
+};
 
 interface GameContextType {
     gameState: GameState;
@@ -34,14 +53,20 @@ const initialState: GameState = {
         dropBoost: 1.0
     },
     equippedWeaponId: null,
-    ownedWeaponIds: []
+    ownedWeaponIds: [],
+    error: null
 };
 
-export const GameProvider = ({ children }: { children: ReactNode }) => {
+interface GameProviderProps {
+    children:   React.ReactNode;
+    initialData?: GameState;
+}
+
+export const GameProvider = ({ children, initialData }: GameProviderProps) => {
     const { loadGame, saveGame } = useStorage(initialState);
 
     // Use loadGame() as initial value
-    const [gameState, setGameState] = useState<GameState>(loadGame);
+    const [gameState, setGameState] = useState<GameState>(initialData || DEFAULT_STATE);
 
     // Flag to record whether it has been displayed (does not affect rendering)
     const hasAlerted = useRef(false);
@@ -98,7 +123,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
             buyUpgrade,
             sellItem,
             useItem
-         }}>
+        }}>
             {children}
         </GameContext.Provider>
     );

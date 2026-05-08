@@ -17,7 +17,7 @@ export const useWeapons = () => {
                 ...prev.ownedWeaponIds,
                 weaponId
             ],
-            equippedWeponId: weaponId,   // 購入時に自動装備
+            equippedWeaponId: weaponId,   // 購入時に自動装備
         }));
 
         return true;

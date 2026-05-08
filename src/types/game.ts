@@ -55,6 +55,7 @@ export interface GameState {
     } | null;
     equippedWeaponId: string | null;    // 装備中の武器ID
     ownedWeaponIds:string[];            // 所持している武器IDのリスト
+    error: string | null;
 }
 
 export interface ExplorationArea {
