@@ -38,23 +38,21 @@ export const useGameActions = (setGameState: React.Dispatch<React.SetStateAction
             if (!item || itemIndex === -1 || !item.effect) return prev;
 
             // Remove one item from Inventory
-            const newInventory = [...prev.inventory];
-            newInventory.splice(itemIndex, 1);
+            const newInventory = prev.inventory.filter((_, i) => i !== itemIndex);
 
-            // apply effect        
-            const nextState = {
-                ...prev,
-                Inventory: newInventory
-            };
-
-            if (item.effect && item.effect.type ==="SPEED_BOOST") {
-                // If already have a buff, decide thether to duplicate it or set the maximum value
-                nextState.nextExpeditionSpeedBoost = Math.max(0.5, prev.nextExpeditionSpeedBoost * item.effect.value);
+            // Apply effect
+            if (item.effect.type === "SPEED_BOOST") {
+                const newSpeedBoost = Math.max(0.5, prev.nextExpeditionSpeedBoost * item.effect.value);
+                alert(`${item.name}を使用しました！次の探索が早くなります。`);
+                return {
+                    ...prev,
+                    inventory: newInventory,
+                    nextExpeditionSpeedBoost: newSpeedBoost,
+                    error: null
+                };
             }
 
-            alert(`${item.name}を使用しました！次の探索が早くなります。`);
-
-            return nextState;
+            return prev;
         });
     };
 

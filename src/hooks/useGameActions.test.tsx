@@ -1,6 +1,6 @@
 import { GameProvider, useGame } from "../context/GameContext";
 import { useGameActions } from "./useGameActions";
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 
 const wrapper = ({ children }: { children: React.ReactNode }) => (
@@ -10,6 +10,14 @@ const wrapper = ({ children }: { children: React.ReactNode }) => (
 );
 
 describe('useGameActions Hook', () => {
+    beforeEach(() => {
+        vi.spyOn(window, 'alert').mockImplementation(() => {}); // alert をモック
+    });
+
+    afterEach(() => {
+        vi.restoreAllMocks(); // モックをリセット
+    });
+
     it('アイテムを売ると、ゴールドが増え、インベントリからアイテムが減ること', async () => {
         const { result } = renderHook(() => {
             const game = useGame();
@@ -68,6 +76,7 @@ describe('useGameActions Hook', () => {
         });
 
         // 3. 検証
+        expect(window.alert).toHaveBeenCalledWith("設備を強化しました！");
         expect(result.current.game.gameState.gold).toBeLessThan(100000); // ゴールドが減っていること
         expect(result.current.game.gameState.upgradeLevel).toBe(1); // アップグレードレベルが上がっていること
     });
@@ -94,11 +103,39 @@ describe('useGameActions Hook', () => {
         });
 
         // 3. 検証
+        expect(window.alert).toHaveBeenCalledWith("ゴールドが足りません！");
         expect(result.current.game.gameState.gold).toBe(0); // ゴールドが減っていないこと
         expect(result.current.game.gameState.upgradeLevel).toBe(0); // アップグレードレベルが上がっていないこと
     });
 
-    afterEach(() => {
-        vi.restoreAllMocks(); // モックをリセット
+    it('アイテムを使用すると、インベントリからアイテムが減り、効果が適用されること', () => {
+        const { result } = renderHook(() => {
+            const game = useGame();
+            const actions = useGameActions(game.setGameState);
+            return { game, actions };
+        }, { wrapper });
+
+        // 1. 初期状態を設定
+        act(() => {
+            result.current.game.setGameState(prev => ({
+                ...prev,
+                inventory: ['potion'], // 例: 'potion' をインベントリに追加
+                nextExpeditionSpeedBoost: 1.0 // 初期値
+            }));
+        });
+
+        // 2. アイテムを使用
+        act(() => {
+            result.current.actions.useItem('potion'); // 例: 'potion' を使用
+        });
+
+        // 3. 検証
+        const finalInventory = result.current.game.gameState.inventory;
+        const finalSpeedBoost = result.current.game.gameState.nextExpeditionSpeedBoost;
+        console.log('Final Inventory after using item:', finalInventory);
+        console.log('Final Speed Boost after using item:', finalSpeedBoost);
+        expect(window.alert).toHaveBeenCalledWith("ポーションを使用しました！次の探索が早くなります。");
+        expect(finalInventory).not.toContain('potion'); // インベントリからアイテムが減っていること
+        expect(finalSpeedBoost).toBeLessThan(1.0); // 効果が適用されていること（例: 0.8 など）
     });
 });
