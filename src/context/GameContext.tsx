@@ -68,7 +68,7 @@ export const GameProvider = ({ children, initialData }: GameProviderProps) => {
     }, [gameState.offlineStats]);   // include in dependent array
 
     const { startExpedition, claimReward, closeResult } = useExpedition(gameState, setGameState);
-    const { sellItem, buyUpgrade, useItem } = useGameActions(gameState, setGameState);
+    const { sellItem, buyUpgrade, useItem } = useGameActions(setGameState);
 
     // Save process
     useEffect(() => {

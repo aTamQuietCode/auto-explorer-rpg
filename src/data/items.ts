@@ -24,4 +24,12 @@ export const ITEMS: Record<string, Item> = {
         sellPrice: 500 ,
         effect: { type: "", value: 0 }
     },
+    "potion": {
+        id: "potion",
+        name: "ポーション",
+        description: "体力を回復する薬。次の探索時間を20%短縮する。",
+        rarity: "Uncommon",
+        sellPrice: 50,
+        effect: { type: "SPEED_BOOST", value: 0.8 }
+    }
 };
