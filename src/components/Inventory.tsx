@@ -27,11 +27,11 @@ const Inventory = () => {
         const diff = rarityOrder[itemB.rarity] - rarityOrder[itemA.rarity];
 
         if (diff !== 0) {
-            return a.localeCompare(b);
+            return diff;
         }
 
         // If the rarity is the same, ID order (ascending order)
-        return diff;
+        return a.localeCompare(b);
     });
 
     return (
@@ -45,6 +45,21 @@ const Inventory = () => {
                         const item = ITEMS[id];
                         if (!item) return null;
 
+                        const isSpeedBoost = item.effect?.type === "SPEED_BOOST";
+                        const isExploringNow = !!gameState.activeExpedition;
+                        // すでにバフが適用されているか（1.0未満か）
+                        const isAlreadyBuffed = gameState.nextExpeditionSpeedBoost < 1.0;
+                        // 「遠征中」または「すでに使用済み」ならボタンを無効化
+                        const isUseDisabled = isSpeedBoost && isExploringNow;
+
+                        // ボタンに表示するテキストを動的に切り替え
+                        let buttonText = "使用する";
+                        if (isExploringNow) {
+                            buttonText = "遠征中は使えません";
+                        } else if (isAlreadyBuffed && isSpeedBoost) {
+                            buttonText = "使用済み（1個まで）";
+                        }
+
                         return (
                             <div key={id} className={`item-card ${item.rarity.toLowerCase()}`}>
                                 <div className="item-info">
@@ -57,8 +72,11 @@ const Inventory = () => {
                                     <span className="item-price">{item.sellPrice} G</span>
                                 </div>
                                 {item.effect && (
-                                    <button onClick={() => useItem(id)} className="use-button" >
-                                        使用する
+                                    <button onClick={() => useItem(id)}
+                                        disabled={isUseDisabled}
+                                        className={`use-button ${isUseDisabled ? "disabled" : ""}`}
+                                    >
+                                        {buttonText}
                                     </button>
                                 )}
                                 <button onClick={() => sellItem(id)} className="sell-button">

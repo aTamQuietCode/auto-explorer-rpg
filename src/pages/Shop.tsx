@@ -26,8 +26,8 @@ const Shop = () => {
                 <h3>自動集金ツールの強化 (Lv.{gameState.upgradeLevel})</h3>
                 <p>次のレベルで <b>{gameState.incomePerMinute + 5} G / 分</b> にアップ！</p>
                 <p>必要費用: {nextCost} G</p>
-                <button onClick={(buyUpgrade)} disabled={gameState.gold < nextCost}>
-                    強化する
+                <button type="button" onClick={buyUpgrade} disabled={gameState.gold < nextCost}>
+                    設備を強化
                 </button>
             </div>
             <hr />

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import type { GameState } from '../types/game';
 import { useGameActions } from '../hooks/useGameActions';
 import { useExpedition } from '../hooks/useExpedition';
@@ -43,10 +43,13 @@ interface GameProviderProps {
 }
 
 export const GameProvider = ({ children, initialData }: GameProviderProps) => {
-    const { saveGame } = useStorage(DEFAULT_STATE);
+    const { loadGame, saveGame } = useStorage(DEFAULT_STATE);
 
     // Use loadGame() as initial value
-    const [gameState, setGameState] = useState<GameState>(initialData || DEFAULT_STATE);
+    const [gameState, setGameState] = useState<GameState>(() => {
+        if (initialData) return initialData;
+        return loadGame();
+    });
 
     // Flag to record whether it has been displayed (does not affect rendering)
     const hasAlerted = useRef(false);
@@ -68,7 +71,19 @@ export const GameProvider = ({ children, initialData }: GameProviderProps) => {
     }, [gameState.offlineStats]);   // include in dependent array
 
     const { startExpedition, claimReward, closeResult } = useExpedition(gameState, setGameState);
-    const { sellItem, buyUpgrade, useItem } = useGameActions(setGameState);
+    const { sellItem: rawSellItem, buyUpgrade: rawBuyUpgrade, useItem: rawUseItem } = useGameActions(gameState, setGameState);
+
+    const buyUpgrade = useCallback(() => {
+        rawBuyUpgrade();
+    }, [rawBuyUpgrade]);
+
+    const useItem = useCallback((itemId:string) => {
+        rawUseItem(itemId);
+    }, [rawUseItem]);
+
+    const sellItem = useCallback((itemId:string) => {
+        rawSellItem(itemId);
+    }, [rawSellItem]);
 
     // Save process
     useEffect(() => {

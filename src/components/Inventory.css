@@ -43,6 +43,14 @@
     margin-right: 5px;
 }
 
+.use-button.disabled {
+    background-color: #333 !important;
+    color: #777 !important;
+    cursor: not-allowed !important;
+    border-color: #444 !important;
+    box-shadow: none !important;
+}
+
 .sell-button {
     background-color: #666; /* グレー系：手放すアクション */
     color: white;

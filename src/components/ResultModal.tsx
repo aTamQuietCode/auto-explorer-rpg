@@ -1,7 +1,7 @@
 import { useGame } from "../context/GameContext";
 import { ITEMS } from "../data/items";
 import { MONSTERS, type Monster } from "../data/monsters";
-import "./ResultModal.css";
+import "./Modal.css";
 
 const ResultModal = () => {
     const { gameState, closeResult } = useGame();

@@ -1,7 +1,8 @@
 import { ITEMS } from "../data/items";
 import type { GameState } from "../types/game";
 
-export const useGameActions = (setGameState: React.Dispatch<React.SetStateAction<GameState>>) => {
+export const useGameActions = (gameState: GameState, setGameState: React.Dispatch<React.SetStateAction<GameState>>) => {
+    let lastUpgradeAlertTime = 0;
 
     // sell Item logic
     const sellItem = (itemId: string) => {
@@ -31,19 +32,28 @@ export const useGameActions = (setGameState: React.Dispatch<React.SetStateAction
 
     // use Item logic
     const useItem = (itemId:string) => {
+        const item = ITEMS[itemId];
+        if (!item || !item.effect) return;
+
+        let usedSuccessfully = false;
+        let errorMessage = "";
+
         setGameState(prev => {
-            const item = ITEMS[itemId];
             const itemIndex = prev.inventory.indexOf(itemId);
+            if (itemIndex === -1) return prev; // インベントリになければ何もしない
 
-            if (!item || itemIndex === -1 || !item.effect) return prev;
+            // スピードブーストかつ遠征中なら何もしない
+           if (item.effect?.type === "SPEED_BOOST" && prev.nextExpeditionSpeedBoost < 1.0) {
+                errorMessage = "アイテムは1回の探索につき1個までしか使用できません。";
+                return prev;
+            }
+            usedSuccessfully = true;
 
-            // Remove one item from Inventory
             const newInventory = prev.inventory.filter((_, i) => i !== itemIndex);
 
             // Apply effect
-            if (item.effect.type === "SPEED_BOOST") {
+            if (item.effect?.type === "SPEED_BOOST") {
                 const newSpeedBoost = Math.max(0.5, prev.nextExpeditionSpeedBoost * item.effect.value);
-                alert(`${item.name}を使用しました！次の探索が早くなります。`);
                 return {
                     ...prev,
                     inventory: newInventory,
@@ -51,36 +61,48 @@ export const useGameActions = (setGameState: React.Dispatch<React.SetStateAction
                     error: null
                 };
             }
-
             return prev;
         });
+
+        if (usedSuccessfully) {
+            alert(`${item.name}を使用しました！次の探索が早くなります。`);
+        } else if (errorMessage) {
+            alert(errorMessage);
+        }
     };
 
     // upgrade logic
     const buyUpgrade = () => {
-        setGameState(prev => {
-            const cost = (prev.upgradeLevel + 1) * 500;
+        // 1. setGameState の「外側」で、現在の gameState を直接使って判定する
+        const cost = (gameState.upgradeLevel + 1) * 500;
 
-            if (!cost || cost <= 0) return prev;
-            
-            // ゴールドが足りる場合、アップグレードを購入
-            if (prev.gold >= cost) {
-                alert("設備を強化しました！");
-                return {
-                    ...prev,
-                    gold: prev.gold - cost,
-                    upgradeLevel: prev.upgradeLevel + 1,
-                    incomePerMinute: prev.incomePerMinute + 5,
-                    error: null
-                };
-            }
+        // 前回の実行から 500ミリ秒（0.5秒）以内の呼び出しは、システムによる自動実行とみなして完全にスルーする
+        const now = Date.now();
+        if (now - lastUpgradeAlertTime < 500) {
+            return; 
+        }
 
-            // ゴールドが足りない場合、エラーを表示
+        // ゴールドが足りない場合、ここで即終了（setGameState すら呼ばない）
+        if (gameState.gold < cost) {
+            lastUpgradeAlertTime = Date.now();
             alert("ゴールドが足りません！");
+            setGameState(prev => ({ ...prev, error: "ゴールドが足りません！" }));
+            return;
+        }
+
+        lastUpgradeAlertTime = Date.now();
+        // 2. ここに到達したということは「確実に購入可能」。先にアラートを出す
+        alert("設備を強化しました！");
+
+        // 3. 状態の更新だけをシンプルに行う（中でのフラグ書き換えは一切しない）
+        setGameState(prev => {
             return {
                 ...prev,
-                error: "ゴールドが足りません！"
-            }
+                gold: prev.gold - cost,
+                upgradeLevel: prev.upgradeLevel + 1,
+                incomePerMinute: prev.incomePerMinute + 5,
+                error: null
+            };
         });
     };
 

@@ -30,7 +30,6 @@ export const useStorage = (initialState: GameState) => {
                 const earnedGold = finalMinutes * data.incomePerMinute;
                 if (earnedGold > 0) {
                     data.gold += earnedGold;
-                    // console.log(`${offlineTimeMinutes}分間の不在により ${earnedGold}G 獲得しました！`);
                     data.offlineStats = {
                         minutes: offlineTimeMinutes,
                         gold: earnedGold
