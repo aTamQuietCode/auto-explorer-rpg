@@ -24,9 +24,11 @@ describe('useGameActions Hook', () => {
     it('アイテムを売ると、ゴールドが増え、インベントリからアイテムが減ること', async () => {
         const { result } = renderHook(() => {
             const game = useGame();
-           return {
+            // 内側のラッパー関数ではなく、renderHook のトップレベルで actions を取得
+            const actions = useGameActions(game.gameState, game.setGameState);
+            return {
                 game,
-                sellItem: (id: string) => useGameActions(game.gameState, game.setGameState).sellItem(id)
+                actions
             };
         }, { wrapper });
 
@@ -41,7 +43,8 @@ describe('useGameActions Hook', () => {
 
         // 2. アイテムを売る
         await act(async () => {
-            result.current.sellItem('potion');
+            // 事前に安全に取得した actions の関数を実行
+            result.current.actions.sellItem('potion');
         });
 
         // 検証
@@ -106,9 +109,11 @@ describe('useGameActions Hook', () => {
     it('アイテムを使用すると、インベントリからアイテムが減り、効果が適用されること', async () => {
         const { result } = renderHook(() => {
             const game = useGame();
+            // 内側のラッパー関数ではなく、renderHook のトップレベルで actions を取得
+            const actions = useGameActions(game.gameState, game.setGameState);
             return {
                 game,
-                executeUseItem: (id: string) => useGameActions(game.gameState, game.setGameState).useItem(id)
+                actions
             };
         }, { wrapper });
 
@@ -123,9 +128,10 @@ describe('useGameActions Hook', () => {
             }));
         });
 
-        // 2. アイテムを使用（新しく作ったラッパー経由で、最新のStateを乗せて実行）
+        // 2. アイテムを使用
         await act(async () => {
-            result.current.executeUseItem('potion');
+            // 事前に安全に取得した actions の関数を実行
+            result.current.actions.useItem('potion');
         });
 
         // 3. 検証

@@ -3,7 +3,7 @@ import { ITEMS } from "../data/items";
 import "./Inventory.css";
 
 const Inventory = () => {
-    const { gameState, sellItem, useItem } = useGame();
+    const { gameState, sellItem, useItem: executeUseItem } = useGame();
 
     // Aggregate the number of items by itemID
     const itemCounts = gameState.inventory.reduce((acc, itemId) => {
@@ -72,7 +72,7 @@ const Inventory = () => {
                                     <span className="item-price">{item.sellPrice} G</span>
                                 </div>
                                 {item.effect && (
-                                    <button onClick={() => useItem(id)}
+                                    <button onClick={() => executeUseItem(id)}
                                         disabled={isUseDisabled}
                                         className={`use-button ${isUseDisabled ? "disabled" : ""}`}
                                     >

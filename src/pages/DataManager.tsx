@@ -34,7 +34,7 @@ const DataManager = () => {
                 } else {
                     alert("不正なファイル形式です。");
                 }
-            } catch (err) {
+            } catch {
                 alert("ファイルの読み込みに失敗しました。");
             }
         };

@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import React, { createContext, useContext, useState, useEffect, useRef, useCallback } from 'react';
 import type { GameState } from '../types/game';
 import { useGameActions } from '../hooks/useGameActions';
@@ -88,7 +90,7 @@ export const GameProvider = ({ children, initialData }: GameProviderProps) => {
     // Save process
     useEffect(() => {
         saveGame(gameState);
-    }, [gameState]);
+    }, [gameState, saveGame]);
 
     // Update "lastUpdate" periodically (keeps time even while the app is open)
     useEffect(() => {

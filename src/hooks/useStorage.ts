@@ -42,7 +42,7 @@ export const useStorage = (initialState: GameState) => {
                 ...data,
                 lastUpdate: now
             };
-        } catch (e) {
+        } catch {
             alert("セーブデータの読み込みに失敗しました");
             return initialState;
         }
@@ -51,6 +51,7 @@ export const useStorage = (initialState: GameState) => {
     // Save data
     const saveGame = (state: GameState) => {
         // Create a copy excluding offlineStats
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { offlineStats, ...dataToSave } = state;
 
         // Add latest timestamp just before saving

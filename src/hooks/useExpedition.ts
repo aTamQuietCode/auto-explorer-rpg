@@ -61,7 +61,7 @@ export const useExpedition = (gameState: GameState, setGameState: React.Dispatch
             const durationMin = totalDurationMs / 60000;
 
             let monsterGold: number = 0;
-            let defeatedMap: { [key: string]: number } = {};
+            const defeatedMap: { [key: string]: number } = {};
 
             const iterations = Math.max(1, Math.floor(durationMin));
             for (let i = 0; i < iterations; i++) {
